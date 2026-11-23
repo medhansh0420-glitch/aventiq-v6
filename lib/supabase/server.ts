@@ -2,14 +2,14 @@
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 
+type CookieOptions = {
+  [key: string]: unknown;
+};
+
 type CookieToSet = {
   name: string;
   value: string;
-  options?: Parameters<
-    ReturnType<typeof cookies> extends Promise<infer T>
-      ? T['set']
-      : never
-  >[2];
+  options?: CookieOptions;
 };
 
 export async function createSupabaseServerClient() {
@@ -39,3 +39,4 @@ export async function createSupabaseServerClient() {
     },
   });
 }
+
