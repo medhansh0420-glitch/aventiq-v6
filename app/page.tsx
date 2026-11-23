@@ -1,82 +1,72 @@
 
-import DiscoverSection from '../DiscoverSection';
-import ConsultationHub from '../ConsultationHub';
+'use client';
+
+import { useState } from 'react';
+import { OPPORTUNITIES } from '../opportunities';
+import OpportunityCard from '../OpportunityCard';
 import MentorMarketplace from '../MentorMarketplace';
-import ScrollEffects from '../ScrollEffects';
 import PublicTrustCommunity from '../PublicTrustCommunity';
 
 export default function Home() {
-  return (
-    <main className="site-shell">
-      <ScrollEffects />
+  const [saved, setSaved] = useState<string[]>([]);
 
-      <header className="nav container">
-        <a href="#top" className="brand">
-          <span className="brandmark">A</span>AventIQ
-        </a>
-        <nav className="navlinks">
-          <a href="#discover">Opportunities</a>
+  function toggleSave(id: string) {
+    setSaved(current =>
+      current.includes(id)
+        ? current.filter(item => item !== id)
+        : [...current, id]
+    );
+  }
+
+  return (
+    <main>
+      <header style={{padding:'24px 5%',display:'flex',justifyContent:'space-between',alignItems:'center',borderBottom:'1px solid var(--border)'}}>
+        <a href="/" style={{fontSize:25,fontWeight:800,textDecoration:'none',color:'var(--text)'}}>AventIQ<span style={{color:'#64b5ff'}}>.</span></a>
+        <nav style={{display:'flex',gap:20,flexWrap:'wrap'}}>
+          <a href="#opportunities">Opportunities</a>
           <a href="#mentors">Mentors</a>
-          <a href="#public-world">Community</a>
-          <a href="#consultations">Consultations</a>
+          <a href="#community">Community</a>
         </nav>
-        <div className="nav-actions">
-          <a href="/auth" className="nav-signin">Sign in</a>
-          <a href="/profile" className="nav-signin">Profile</a>
-          <a href="/notifications" className="nav-signin">Updates</a>
-          <a href="#discover" className="nav-cta">Explore AventIQ ↗</a>
-        </div>
       </header>
 
-      <section id="top" className="hero container">
-        <div className="hero-copy reveal">
-          <div className="eyebrow">
-            <span className="dot" /> A clearer path to what comes next
-          </div>
-          <h1>Make your next move <em>count.</em></h1>
-          <p className="hero-lede">
-            Discover meaningful opportunities. Learn from people who have been there.
-            Build momentum with a community that thinks beyond borders.
-          </p>
-          <div className="hero-actions">
-            <a href="#discover" className="primary">Explore opportunities ↗</a>
-            <a href="#mentors" className="secondary">Meet the mentor network</a>
-          </div>
+      <section style={{padding:'90px 7%',background:'var(--background)'}}>
+        <p style={{color:'#64b5ff',fontWeight:700}}>YOUR FUTURE, WITHOUT BORDERS</p>
+        <h1 style={{fontSize:'clamp(42px,7vw,76px)',maxWidth:850,lineHeight:1.05}}>
+          Discover opportunities.<br />Build your next chapter.
+        </h1>
+        <p style={{maxWidth:620,fontSize:18,color:'var(--muted)',lineHeight:1.7}}>
+          Explore global opportunities, connect with mentors and grow through a worldwide community.
+        </p>
+        <a href="#opportunities" style={{display:'inline-block',padding:'14px 22px',background:'#64b5ff',color:'#07111f',borderRadius:10,fontWeight:700}}>
+          Explore opportunities ↗
+        </a>
+      </section>
+
+      <section id="opportunities" style={{padding:'65px 5%'}}>
+        <h2>Explore opportunities</h2>
+        <p style={{color:'var(--muted)'}}>Discover opportunities from across the world.</p>
+        <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(280px,1fr))',gap:18,marginTop:25}}>
+          {OPPORTUNITIES.map(opportunity => (
+            <OpportunityCard
+              key={opportunity.id}
+              opportunity={opportunity}
+              saved={saved.includes(opportunity.id)}
+              onSave={() => toggleSave(opportunity.id)}
+            />
+          ))}
         </div>
       </section>
 
-      <section className="intro-band reveal">
-        <div className="container intro-grid">
-          <p className="eyebrow">THE AVENTIQ APPROACH</p>
-          <h2>Ambition is everywhere.<br /><em>Access should be, too.</em></h2>
-          <p>
-            AventIQ brings opportunity discovery, mentorship and community
-            into one considered experience.
-          </p>
-        </div>
+      <section id="mentors" style={{padding:'55px 5%'}}>
+        <MentorMarketplace />
       </section>
 
-      <div className="section-intro container reveal" id="discover">
-        <div>
-          <p className="eyebrow">THE OPPORTUNITY LANDSCAPE</p>
-          <h2>Find something worth<br /><em>your next step.</em></h2>
-        </div>
-        <p>Explore opportunities and confirm all details with official providers.</p>
-      </div>
+      <section id="community" style={{padding:'55px 5%'}}>
+        <PublicTrustCommunity />
+      </section>
 
-      <DiscoverSection />
-      <MentorMarketplace />
-      <ConsultationHub />
-      <PublicTrustCommunity />
-
-      <footer>
-        <div className="container footer-inner">
-          <a href="#top" className="brand">
-            <span className="brandmark">A</span>AventIQ
-          </a>
-          <p>Discover with intention. Connect with care. Grow without borders.</p>
-          <small>© {new Date().getFullYear()} AventIQ</small>
-        </div>
+      <footer style={{padding:30,textAlign:'center',borderTop:'1px solid var(--border)'}}>
+        © {new Date().getFullYear()} AventIQ. Discover beyond boundaries.
       </footer>
     </main>
   );
